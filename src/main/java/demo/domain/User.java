@@ -6,6 +6,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * 用户User POJO定义
+ * 
+ * @author jiekechoo
+ *
+ */
 @Entity
 @Table(name = "users")
 public class User {

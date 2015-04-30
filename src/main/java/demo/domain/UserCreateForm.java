@@ -2,6 +2,12 @@ package demo.domain;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+/**
+ * 创建用户字段POJO定义
+ * 
+ * @author jiekechoo
+ *
+ */
 public class UserCreateForm {
 
 	@NotEmpty

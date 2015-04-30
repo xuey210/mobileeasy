@@ -10,32 +10,38 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+/**
+ * 安全配置文件，主要是重写默认的认证方式和访问目录权限
+ * 
+ * @author jiekechoo
+ *
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	DataSource dataSource;
-	
+
+	/**
+	 * 使用jdbc认证方式，密码采用BCrypt加密，salt 10
+	 */
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth)
 			throws Exception {
-		auth
-		.jdbcAuthentication()
-		.dataSource(dataSource)
-		.passwordEncoder(new BCryptPasswordEncoder(10));
+		auth.jdbcAuthentication().dataSource(dataSource)
+				.passwordEncoder(new BCryptPasswordEncoder(10));
 	}
 
+	/**
+	 * 除了/create目录API，其他都需要认证才能访问
+	 */
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		// TODO Auto-generated method stub
-		http
-		.httpBasic().and()
-		.authorizeRequests()
-		.antMatchers("/create").permitAll()
-		.anyRequest().authenticated()
-		.and().csrf().disable();
+		http.httpBasic().and().authorizeRequests().antMatchers("/create")
+				.permitAll().anyRequest().authenticated().and().csrf()
+				.disable();
 	}
 
-	
 }

@@ -19,6 +19,12 @@ import demo.domain.UserCreateForm;
 import demo.service.UserService;
 import demo.validator.UserCreateFormValidator;
 
+/**
+ * 处理用户类接口
+ * 
+ * @author jiekechoo
+ *
+ */
 @RestController
 public class UserController {
 
