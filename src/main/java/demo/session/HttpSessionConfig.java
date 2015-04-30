@@ -1,4 +1,4 @@
-package demo;
+package demo.session;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

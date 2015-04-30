@@ -1,4 +1,7 @@
-package demo;
+package demo.service;
+
+import demo.domain.User;
+import demo.domain.UserCreateForm;
 
 
 public interface UserService {
