@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import demo.domain.Authority;
 import demo.domain.User;
 import demo.domain.UserCreateForm;
+import demo.repository.AuthorityRepository;
 import demo.repository.UserRepository;
 
 /**
@@ -22,6 +24,7 @@ public class UserServiceImpl implements UserService {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(UserServiceImpl.class);
 	private final UserRepository userRepository;
+	private final AuthorityRepository authorityRepository;
 
 	/**
 	 * 装载userRepository
@@ -29,8 +32,10 @@ public class UserServiceImpl implements UserService {
 	 * @param userRepository
 	 */
 	@Autowired
-	public UserServiceImpl(UserRepository userRepository) {
+	public UserServiceImpl(UserRepository userRepository,
+			AuthorityRepository authorityRepository) {
 		this.userRepository = userRepository;
+		this.authorityRepository = authorityRepository;
 	}
 
 	/**
@@ -53,7 +58,12 @@ public class UserServiceImpl implements UserService {
 				.getPassword()));
 		user.setEnabled(1);
 
-		System.out.println(form);
+		Authority authority = new Authority();
+		authority.setUsername(form.getUsername());
+		authority.setAuthority("ROLE_USER");
+		authorityRepository.save(authority);
+
+		// System.out.println(form);
 		return userRepository.save(user);
 	}
 
