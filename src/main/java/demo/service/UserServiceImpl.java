@@ -7,8 +7,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import demo.domain.Authority;
-import demo.domain.User;
 import demo.domain.UserCreateForm;
+import demo.domain.UserRegister;
 import demo.repository.AuthorityRepository;
 import demo.repository.UserRepository;
 
@@ -19,7 +19,7 @@ import demo.repository.UserRepository;
  *
  */
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserRegisterService {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(UserServiceImpl.class);
@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
 	 * 查找用户名
 	 */
 	@Override
-	public User getUserByUsername(String username) {
+	public UserRegister getUserByUsername(String username) {
 		LOGGER.debug("Getting user by username={}", username);
 		return userRepository.findByUsername(username);
 	}
@@ -51,8 +51,8 @@ public class UserServiceImpl implements UserService {
 	 * 创建新用户
 	 */
 	@Override
-	public User create(UserCreateForm form) {
-		User user = new User();
+	public UserRegister create(UserCreateForm form) {
+		UserRegister user = new UserRegister();
 		user.setUsername(form.getUsername());
 		user.setPassword(new BCryptPasswordEncoder(10).encode(form
 				.getPassword()));

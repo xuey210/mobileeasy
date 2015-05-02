@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import org.springframework.data.repository.CrudRepository;
 
-import demo.domain.User;
+import demo.domain.UserRegister;
 
 /**
  * 用户User CrudRepository定义
@@ -12,10 +12,10 @@ import demo.domain.User;
  * @author jiekechoo
  *
  */
-public interface UserRepository extends CrudRepository<User, Long> {
+public interface UserRepository extends CrudRepository<UserRegister, Long> {
 
-	Collection<User> findAll();
+	Collection<UserRegister> findAll();
 
-	User findByUsername(String username);
+	UserRegister findByUsername(String username);
 
 }

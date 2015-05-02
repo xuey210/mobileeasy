@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import demo.domain.UserCreateForm;
-import demo.service.UserService;
+import demo.service.UserRegisterService;
 import demo.validator.UserCreateFormValidator;
 
 /**
@@ -30,13 +30,13 @@ public class UserController {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(UserController.class);
-	private UserService userService;
+	private UserRegisterService userRegisterService;
 	private UserCreateFormValidator userCreateFormValidator;
 
 	@Autowired
-	public UserController(UserService userService,
+	public UserController(UserRegisterService userRegisterService,
 			UserCreateFormValidator userCreateFormValidator) {
-		this.userService = userService;
+		this.userRegisterService = userRegisterService;
 		this.userCreateFormValidator = userCreateFormValidator;
 	}
 
@@ -56,7 +56,7 @@ public class UserController {
 			return "user_create error: failed validation ";
 		}
 		try {
-			userService.create(form);
+			userRegisterService.create(form);
 		} catch (DataIntegrityViolationException e) {
 			// probably email already exists - very rare case when multiple
 			// admins are adding same user
