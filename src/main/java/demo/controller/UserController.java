@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -36,6 +37,9 @@ public class UserController {
 
 	@Value("${myapp.value}")
 	private String myvalue;
+	
+	@Autowired
+	private Environment env;
 
 	@Autowired
 	public UserController(UserRegisterService userRegisterService,
@@ -79,8 +83,10 @@ public class UserController {
 	@ResponseBody
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public String list() {
+		String myvalue1 = env.getProperty("myapp.value1");
+		
 
-		return "LIST " + myvalue;
+		return "myapp.value: " + myvalue + ", myapp.value1: " + myvalue1;
 
 	}
 
