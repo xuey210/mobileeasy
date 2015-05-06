@@ -1,13 +1,11 @@
 package demo.controller;
 
-import javax.annotation.Resource;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -21,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.wordnik.swagger.annotations.Api;
 
 import demo.domain.UserCreateForm;
 import demo.domain.UserRegister;
@@ -36,6 +36,8 @@ import demo.validator.UserCreateFormValidator;
  *
  */
 @RestController
+@Api(basePath = "/api", value = "user API", description = "用户", produces = "application/json")
+@RequestMapping("/api")
 public class UserController {
 
 	private static final Logger LOGGER = LoggerFactory
@@ -46,7 +48,7 @@ public class UserController {
 
 	@Value("${myapp.value}")
 	private String myvalue;
-	
+
 	@Autowired
 	private Environment env;
 

@@ -56,9 +56,20 @@
 			<artifactId>spring-session-data-redis</artifactId>
 			<version>1.0.1.RELEASE</version>
 		</dependency>
+
+		<dependency>
+			<groupId>com.mangofactory</groupId>
+			<artifactId>swagger-springmvc</artifactId>
+			<version>1.0.0</version>
+		</dependency>
 	</dependencies>
 
-
+	<repositories>
+		<repository>
+			<id>spring-releases</id>
+			<url>https://repo.spring.io/libs-release</url>
+		</repository>
+	</repositories>
 
 	<build>
 		<plugins>

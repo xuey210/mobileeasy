@@ -1,5 +1,14 @@
 README.md
 
+启动应用：
+
+mvn spring-boot:run
+
+访问API:
+
+http://localhost:8080/debug/index.html 即可在线查看API手册和调试API。
+
+
 create user table:
 
 CREATE TABLE `users` (
