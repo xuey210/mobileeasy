@@ -1,16 +1,21 @@
 package demo.controller;
 
+import javax.annotation.Resource;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,6 +23,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import demo.domain.UserCreateForm;
+import demo.domain.UserRegister;
+import demo.error.ErrorMessage;
+import demo.repository.UserRepository;
 import demo.service.UserRegisterService;
 import demo.validator.UserCreateFormValidator;
 
@@ -34,6 +42,7 @@ public class UserController {
 			.getLogger(UserController.class);
 	private UserRegisterService userRegisterService;
 	private UserCreateFormValidator userCreateFormValidator;
+	private UserRepository userRepository;
 
 	@Value("${myapp.value}")
 	private String myvalue;
@@ -43,9 +52,11 @@ public class UserController {
 
 	@Autowired
 	public UserController(UserRegisterService userRegisterService,
-			UserCreateFormValidator userCreateFormValidator) {
+			UserCreateFormValidator userCreateFormValidator,
+			UserRepository userRepository) {
 		this.userRegisterService = userRegisterService;
 		this.userCreateFormValidator = userCreateFormValidator;
+		this.userRepository = userRepository;
 	}
 
 	@InitBinder("form")
@@ -80,11 +91,54 @@ public class UserController {
 		return "create user success";
 	}
 
+	/**
+	 * 使用 ResponseBody作为结果 200
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
+	public UserRegister findByUserId(@PathVariable long id) {
+		UserRegister user = userRepository.findOne(id);
+		// HttpStatus status = user != null ? HttpStatus.OK :
+		// HttpStatus.NOT_FOUND;
+		return user;
+	}
+
+	/**
+	 * 使用ResponseEntity作为返回结果 404
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	public ResponseEntity<UserRegister> findById(@PathVariable long id) {
+		UserRegister user = userRepository.findOne(id);
+		HttpStatus status = user != null ? HttpStatus.OK : HttpStatus.NOT_FOUND;
+		return new ResponseEntity<UserRegister>(user, status);
+	}
+
+	/**
+	 * 使用 ResponseEntity 返回自定义错误结果
+	 * 
+	 * @return
+	 */
+
+	@RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
+	public ResponseEntity<?> findByUsersId(@PathVariable long id) {
+		UserRegister user = userRepository.findOne(id);
+		if (user == null) {
+			ErrorMessage error = new ErrorMessage(106, "User not found.");
+			return new ResponseEntity<ErrorMessage>(error, HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<UserRegister>(user, HttpStatus.OK);
+	}
+
 	@ResponseBody
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public String list() {
 		String myvalue1 = env.getProperty("myapp.value1");
-		
 
 		return "myapp.value: " + myvalue + ", myapp.value1: " + myvalue1;
 
