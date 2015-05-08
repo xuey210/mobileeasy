@@ -39,9 +39,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		// TODO Auto-generated method stub
-		http.httpBasic().and().authorizeRequests().antMatchers("/create")
-				.permitAll().anyRequest().authenticated().and().csrf()
-				.disable();
+		http
+		.httpBasic()
+		.and().authorizeRequests()
+		.antMatchers("/api/create").permitAll()
+//		.anyRequest().authenticated()
+		.and().csrf().disable();
 	}
 
 }
