@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -24,7 +25,7 @@ import com.wordnik.swagger.annotations.Api;
 
 import demo.domain.UserCreateForm;
 import demo.domain.UserRegister;
-import demo.error.ErrorMessage;
+import demo.message.Message;
 import demo.repository.UserRepository;
 import demo.service.UserRegisterService;
 import demo.validator.UserCreateFormValidator;
@@ -36,6 +37,7 @@ import demo.validator.UserCreateFormValidator;
  *
  */
 @RestController
+@PropertySource("classpath:message.properties")
 @Api(basePath = "/api", value = "user API", description = "用户", produces = "application/json")
 @RequestMapping("/api")
 public class UserController {
@@ -45,6 +47,8 @@ public class UserController {
 	private UserRegisterService userRegisterService;
 	private UserCreateFormValidator userCreateFormValidator;
 	private UserRepository userRepository;
+
+	private Message message = new Message();
 
 	@Value("${myapp.value}")
 	private String myvalue;
@@ -131,10 +135,11 @@ public class UserController {
 	public ResponseEntity<?> findByUsersId(@PathVariable long id) {
 		UserRegister user = userRepository.findOne(id);
 		if (user == null) {
-			ErrorMessage error = new ErrorMessage(106, "User not found.");
-			return new ResponseEntity<ErrorMessage>(error, HttpStatus.NOT_FOUND);
+			message.setMsg(106, env.getProperty("106"));
+			return new ResponseEntity<Message>(message, HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<UserRegister>(user, HttpStatus.OK);
+		message.setMsg(101, "Get user info", user);
+		return new ResponseEntity<Message>(message, HttpStatus.OK);
 	}
 
 	@ResponseBody
