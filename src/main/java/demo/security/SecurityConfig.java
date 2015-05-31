@@ -42,8 +42,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http
 		.httpBasic()
 		.and().authorizeRequests()
-		.antMatchers("/api/create").permitAll()
-//		.anyRequest().authenticated()
+		.antMatchers("/api/create").permitAll() // 用户注册不需要登录
+		.antMatchers("/api/i/**").hasRole("USER") // url中含有/i/的需要登录
 		.and().csrf().disable();
 	}
 

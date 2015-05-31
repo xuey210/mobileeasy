@@ -1,5 +1,6 @@
 package demo.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -18,16 +20,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
 
+import demo.domain.User;
 import demo.domain.UserCreateForm;
-import demo.domain.UserRegister;
 import demo.message.Message;
 import demo.repository.UserRepository;
-import demo.service.UserRegisterService;
+import demo.service.UserService;
 import demo.validator.UserCreateFormValidator;
 
 /**
@@ -38,13 +43,13 @@ import demo.validator.UserCreateFormValidator;
  */
 @RestController
 @PropertySource("classpath:message.properties")
-@Api(basePath = "/api", value = "user API", description = "用户", produces = "application/json")
+@Api(basePath = "/api", value = "用户API", description = "用户相关", produces = "application/json")
 @RequestMapping("/api")
 public class UserController {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(UserController.class);
-	private UserRegisterService userRegisterService;
+	private UserService userService;
 	private UserCreateFormValidator userCreateFormValidator;
 	private UserRepository userRepository;
 
@@ -57,10 +62,10 @@ public class UserController {
 	private Environment env;
 
 	@Autowired
-	public UserController(UserRegisterService userRegisterService,
+	public UserController(UserService userService,
 			UserCreateFormValidator userCreateFormValidator,
 			UserRepository userRepository) {
-		this.userRegisterService = userRegisterService;
+		this.userService = userService;
 		this.userCreateFormValidator = userCreateFormValidator;
 		this.userRepository = userRepository;
 	}
@@ -70,6 +75,7 @@ public class UserController {
 		binder.addValidators(userCreateFormValidator);
 	}
 
+	@ApiOperation(httpMethod = "POST", value = "创建用户(<font color='blue'>release</font>)", notes = "POST请求，根据model设置")
 	@ResponseBody
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	public String handleUserCreateForm(@Valid @RequestBody UserCreateForm form,
@@ -81,7 +87,7 @@ public class UserController {
 			return "user_create error: failed validation ";
 		}
 		try {
-			userRegisterService.create(form);
+			userService.create(form);
 		} catch (DataIntegrityViolationException e) {
 			// probably email already exists - very rare case when multiple
 			// admins are adding same user
@@ -103,10 +109,11 @@ public class UserController {
 	 * @param id
 	 * @return
 	 */
+	@ApiOperation(httpMethod = "GET", value = "查看用户信息-HTTP200(<font color='blue'>release</font>)", notes = "使用用户id进行查看，如果用户不存在，也返回200。返回用户类实体")
 	@ResponseBody
-	@RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
-	public UserRegister findByUserId(@PathVariable long id) {
-		UserRegister user = userRepository.findOne(id);
+	@RequestMapping(value = "/i/user/{id}", method = RequestMethod.GET)
+	public User findByUserId(@PathVariable long id) {
+		User user = userRepository.findOne(id);
 		// HttpStatus status = user != null ? HttpStatus.OK :
 		// HttpStatus.NOT_FOUND;
 		return user;
@@ -118,11 +125,12 @@ public class UserController {
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public ResponseEntity<UserRegister> findById(@PathVariable long id) {
-		UserRegister user = userRepository.findOne(id);
+	@ApiOperation(httpMethod = "GET", value = "查看用户信息-HTTP404(<font color='blue'>release</font>)", notes = "使用用户id进行查看，如果用户不存在，返回404错误。返回用户类实体")
+	@RequestMapping(value = "/i/{id}", method = RequestMethod.GET)
+	public ResponseEntity<User> findById(@PathVariable long id) {
+		User user = userRepository.findOne(id);
 		HttpStatus status = user != null ? HttpStatus.OK : HttpStatus.NOT_FOUND;
-		return new ResponseEntity<UserRegister>(user, status);
+		return new ResponseEntity<User>(user, status);
 	}
 
 	/**
@@ -130,10 +138,10 @@ public class UserController {
 	 * 
 	 * @return
 	 */
-
-	@RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
+	@ApiOperation(httpMethod = "GET", value = "查看用户信息(<font color='blue'>release</font>)", notes = "使用用户id进行查看，自定义返回消息类：code，msg，content")
+	@RequestMapping(value = "/i/users/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> findByUsersId(@PathVariable long id) {
-		UserRegister user = userRepository.findOne(id);
+		User user = userRepository.findOne(id);
 		if (user == null) {
 			message.setMsg(106, env.getProperty("106"));
 			return new ResponseEntity<Message>(message, HttpStatus.NOT_FOUND);
@@ -142,12 +150,23 @@ public class UserController {
 		return new ResponseEntity<Message>(message, HttpStatus.OK);
 	}
 
+	@ApiOperation(httpMethod = "GET", value = "用户信息列表(<font color='blue'>release</font>)", notes = "查看用户信息列表，可分页")
 	@ResponseBody
-	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public String list() {
-		String myvalue1 = env.getProperty("myapp.value1");
+	@RequestMapping(value = "/users/list", method = RequestMethod.GET)
+	public ResponseEntity<Message> list(Pageable p) {
 
-		return "myapp.value: " + myvalue + ", myapp.value1: " + myvalue1;
+		message.setMsg(1, "List Users", userService.listAllUsers(p));
+		return new ResponseEntity<Message>(message, HttpStatus.OK);
+
+	}
+
+	@ApiOperation(httpMethod = "POST", value = "上传用户头像(<font color='blue'>release</font>)", notes = "使用MultipartFile方式")
+	@RequestMapping(value = "/i/uploadImage", method = RequestMethod.POST)
+	public ResponseEntity<?> uploadImage(@RequestParam MultipartFile file,
+			HttpServletRequest request) {
+		message.setMsg(1, "upload user image",
+				userService.uploadImage(file, request));
+		return new ResponseEntity<Message>(message, HttpStatus.OK);
 
 	}
 

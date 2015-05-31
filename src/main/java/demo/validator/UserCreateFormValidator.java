@@ -8,7 +8,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import demo.domain.UserCreateForm;
-import demo.service.UserRegisterService;
+import demo.service.UserService;
 
 /**
  * 验证字段实现
@@ -21,11 +21,11 @@ public class UserCreateFormValidator implements Validator {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(UserCreateFormValidator.class);
-	private final UserRegisterService userRegisterService;
+	private final UserService userService;
 
 	@Autowired
-	public UserCreateFormValidator(UserRegisterService userService) {
-		this.userRegisterService = userService;
+	public UserCreateFormValidator(UserService userService) {
+		this.userService = userService;
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public class UserCreateFormValidator implements Validator {
 	}
 
 	private void validateUsername(Errors errors, UserCreateForm form) {
-		if (userRegisterService.getUserByUsername(form.getUsername()) != null) {
+		if (userService.getUserByUsername(form.getUsername()) != null) {
 			errors.reject("username.exists",
 					"User with this USERNAME already exists");
 		}
