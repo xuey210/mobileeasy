@@ -152,7 +152,7 @@ public class UserController {
 
 	@ApiOperation(httpMethod = "GET", value = "用户信息列表(<font color='blue'>release</font>)", notes = "查看用户信息列表，可分页")
 	@ResponseBody
-	@RequestMapping(value = "/users/list", method = RequestMethod.GET)
+	@RequestMapping(value = "/i/users/list", method = RequestMethod.GET)
 	public ResponseEntity<Message> list(Pageable p) {
 
 		message.setMsg(1, "List Users", userService.listAllUsers(p));

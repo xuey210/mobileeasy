@@ -4,10 +4,12 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
@@ -18,6 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
  */
 @Configuration
 @EnableWebSecurity
+@EnableWebMvcSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
@@ -26,25 +29,37 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	/**
 	 * 使用jdbc认证方式，密码采用BCrypt加密，salt 10
 	 */
-	@Override
-	protected void configure(AuthenticationManagerBuilder auth)
+	@Autowired
+	public void configureGlobal(AuthenticationManagerBuilder auth)
 			throws Exception {
 		auth.jdbcAuthentication().dataSource(dataSource)
 				.passwordEncoder(new BCryptPasswordEncoder(10));
+
 	}
 
-	/**
-	 * 除了/create目录API，其他都需要认证才能访问
-	 */
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		// TODO Auto-generated method stub
-		http
-		.httpBasic()
-		.and().authorizeRequests()
-		.antMatchers("/api/create").permitAll() // 用户注册不需要登录
-		.antMatchers("/api/i/**").hasRole("USER") // url中含有/i/的需要登录
-		.and().csrf().disable();
+	@Configuration
+	@Order(1)
+	public static class ApiWebSecurityConfigurationAdapter extends
+			WebSecurityConfigurerAdapter {
+		protected void configure(HttpSecurity http) throws Exception {
+			http.antMatcher("/api/i/**").authorizeRequests().anyRequest()
+					.hasRole("USER").and().httpBasic();
+		}
 	}
 
+	@Configuration
+	@Order(2)
+	public static class FormLoginWebSecurityConfigurerAdapter extends
+			WebSecurityConfigurerAdapter {
+
+		@Override
+		protected void configure(HttpSecurity http) throws Exception {
+			http.authorizeRequests()
+					.antMatchers("/api/create", "/", "/assets/**", "/plugins/**",
+							"/bootstrap/**", "/api-docs/**", "/debug/**")
+					.permitAll().anyRequest().authenticated().and().formLogin()
+					.loginPage("/login").permitAll().and().logout().permitAll()
+					.and().csrf().disable();
+		}
+	}
 }
