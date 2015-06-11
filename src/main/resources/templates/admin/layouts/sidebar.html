@@ -66,11 +66,11 @@
 
 			<!--=== Navigation ===-->
 			<ul id="nav">
-				<li class="current"><a href="./"> <i
+				<li th:class="${dashboard} ? 'current' : ''"><a href="./"> <i
 						class="icon-dashboard"></i> 仪表盘
 				</a></li>
-				<li><a href="user"> <i
-						class="icon-dashboard"></i> 用户管理
+				<li th:class="${user} ? 'current' : ''"><a href="user"> <i
+						class="icon-user"></i> 用户管理
 				</a></li>
 	
 			</ul>

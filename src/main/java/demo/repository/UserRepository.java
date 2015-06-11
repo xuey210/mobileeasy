@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.rest.core.annotation.RestResource;
 
 import demo.domain.User;
 
@@ -14,6 +15,7 @@ import demo.domain.User;
  * @author jiekechoo
  *
  */
+@RestResource(exported = false)
 public interface UserRepository extends CrudRepository<User, Long> {
 
 	Collection<User> findAll();

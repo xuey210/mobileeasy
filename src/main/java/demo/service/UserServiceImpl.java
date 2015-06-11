@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -208,7 +209,23 @@ public class UserServiceImpl implements UserService {
 			data.put("id", user.getId());
 			data.put("username", user.getUsername());
 			data.put("image", user.getImage());
-			data.put("enabled", user.getEnabled());
+			if (user.getEnabled() == 1) {
+				data.put("enabled", "<font color='green'>启用</font>");
+			} else {
+				data.put("enabled", "<font color='red'>禁用</font>");
+			}
+
+			List<Authority> authorities = authorityRepository
+					.findByUsername(user.getUsername());
+			ArrayList<String> arrayList = new ArrayList<String>();
+			for (Authority authority : authorities) {
+				if (authority.getAuthority().equals("ROLE_ADMIN")) {
+					arrayList.add("管理员");
+				} else if (authority.getAuthority().equals("ROLE_USER")) {
+					arrayList.add("用户");
+				}
+			}
+			data.put("role", arrayList.toString());
 			pList.add(data);
 			i++;
 		}
