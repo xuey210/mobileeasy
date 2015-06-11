@@ -4,6 +4,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -133,7 +135,7 @@ public class UserServiceImpl implements UserService {
 							request.getServerName(), request.getServerPort(),
 							request.getContextPath()).toString();
 					ret.put("url", serverPath + "/" + relativeFile);
-					
+
 					user.setImage(relativeFile);
 					userRepository.save(user);
 
@@ -187,5 +189,35 @@ public class UserServiceImpl implements UserService {
 	public Object listAllUsers(Pageable p) {
 		Page<User> users = userRepository.findAll(p);
 		return users;
+	}
+
+	@Override
+	public Object getUserList(int current, int rowCount, String searchPhrase) {
+		HashMap<String, Object> ret = new HashMap<String, Object>();
+		ArrayList<Object> pList = new ArrayList<Object>();
+		Long total = userRepository.count();
+		int i = 0;
+
+		if (rowCount == -1) {
+			rowCount = new Long(total).intValue();
+		}
+		Page<User> users = userRepository.findByUsernameContaining(
+				searchPhrase, new PageRequest(current - 1, rowCount));
+		for (User user : users) {
+			HashMap<String, Object> data = new HashMap<String, Object>();
+			data.put("id", user.getId());
+			data.put("username", user.getUsername());
+			data.put("image", user.getImage());
+			data.put("enabled", user.getEnabled());
+			pList.add(data);
+			i++;
+		}
+
+		ret.put("current", 1);
+		ret.put("rowCount", i);
+		ret.put("rows", pList);
+		ret.put("total", total);
+
+		return ret;
 	}
 }

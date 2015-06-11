@@ -54,9 +54,9 @@ $(document).ready(function(){
 		window.setTimeout(function () {
 			App.unblockUI(el);
 			noty({
-				text: '<strong>Widget updated.</strong>',
+				text: '<strong>已更新</strong>',
 				type: 'success',
-				timeout: 1000
+				timeout: 2000
 			});
 		}, 1000);
 	});

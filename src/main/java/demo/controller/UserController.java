@@ -170,4 +170,13 @@ public class UserController {
 
 	}
 
+	@ApiOperation(httpMethod = "POST", value = "用户信息列表(<font color='blue'>供管理界面使用</font>)", notes = "查看用户信息列表，可分页")
+	@RequestMapping(value = "/getUserList", method = RequestMethod.POST)
+	public Object getUserList(@RequestParam(required = false) int current,
+			@RequestParam(required = false) int rowCount,
+			@RequestParam(required = false) String searchPhrase) {
+		return userService.getUserList(current, rowCount, searchPhrase);
+
+	}
+
 }
