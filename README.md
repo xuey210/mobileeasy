@@ -1,5 +1,8 @@
 #Spring Security Session Redis UserDetails Rest API 手机APP后端 后台管理 综合一体化方案
 
+##架构设计
+![Alt 架构设计](https://cloud.githubusercontent.com/assets/3350211/8512734/6e6de47a-2383-11e5-8f1f-f30632b556d1.png)
+
 ##启动应用：
 mvn spring-boot:run
 
