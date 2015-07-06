@@ -2,6 +2,8 @@
 
 ##架构设计
 ![Alt 架构设计](https://cloud.githubusercontent.com/assets/3350211/8512734/6e6de47a-2383-11e5-8f1f-f30632b556d1.png)
+##业务逻辑层次划分
+![业务逻辑层次划分](https://cloud.githubusercontent.com/assets/3350211/8520535/a580a94a-240d-11e5-8516-1d6f1b1ef317.jpg)
 ##在线API参考手册
 ![Alt 在线API参考手册](https://cloud.githubusercontent.com/assets/3350211/8520167/a0072938-240a-11e5-8f74-4496a72f0355.png)
 ##管理后台主页
@@ -19,7 +21,7 @@ http://localhost:8080/debug/index.html 即可在线查看API手册和调试API�
 
 ##操作步骤
 #####1、注册用户： /api/create
-#####2、http://localhost:8080/ 测试“多重认证”
+#####2、http://localhost:8080/ 测试“多重认证”（web form和httpBasic）
 #####3、http://localhost:8080/admin/ 登录访问图形管理界面
 #####4、http://localhsot:8080/lightadmin/ 可GUI管理数据库
 
