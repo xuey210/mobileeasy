@@ -2,6 +2,12 @@
 
 ##架构设计
 ![Alt 架构设计](https://cloud.githubusercontent.com/assets/3350211/8512734/6e6de47a-2383-11e5-8f1f-f30632b556d1.png)
+##在线API参考手册
+![Alt 在线API参考手册](https://cloud.githubusercontent.com/assets/3350211/8520167/a0072938-240a-11e5-8f74-4496a72f0355.png)
+##管理后台主页
+![Alt 管理后台主页](https://cloud.githubusercontent.com/assets/3350211/8520168/a477b604-240a-11e5-84c1-8dc71d2f5496.png)
+##管理后台-用户管理
+![Alt 管理后台-用户管理](https://cloud.githubusercontent.com/assets/3350211/8520171/a6689f3c-240a-11e5-8f2c-889a77f871ff.png)
 
 ##启动应用：
 mvn spring-boot:run
