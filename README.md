@@ -15,7 +15,7 @@
 
 ##启动应用步骤：
 #####1、本地新建MySQL数据库demo，导入数据表（下面有create user table）;
-#####2、本地启动redis服务器；
+#####2、本地启动redis服务器(默认redis存储token已关闭，可以在demo.session中去掉注释，来开启redis给功能)；
 #####3、运行 mvn spring-boot:run
 log出现：Tomcat started on port(s): 8080 (http)，证明启动成功
 
