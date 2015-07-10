@@ -25,7 +25,7 @@ http://localhost:8080/debug/index.html 即可在线查看API手册和调试API�
 ##具体测试操作步骤
 #####1、使用在线API注册用户： /api/create 接口；
 #####2、http://localhost:8080/ 测试“多重认证”（web form模拟web应用和httpBasic模拟客户端应用）；
-#####3、http://localhost:8080/admin/ 登录访问图形管理界面；
+#####3、http://localhost:8080/admin/ 登录访问图形管理界面（需要在authorities表中增加一条 第1步中创建的用户权限，比如：admin ROLE_ADMIN ）；
 #####4、http://localhsot:8080/lightadmin/ 可GUI管理数据库；
 
 
