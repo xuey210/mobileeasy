@@ -16,9 +16,11 @@
 ##启动应用步骤：
 #####1、本地新建MySQL数据库demo，导入数据表（下面有create user table）;
 #####2、本地启动redis服务器(默认redis存储token已关闭，可以在demo.session中去掉注释，来开启redis给功能)；
-#####3、运行 mvn spring-boot:run
+#####3、运行 
+```
+mvn spring-boot:run
 log出现：Tomcat started on port(s): 8080 (http)，证明启动成功
-
+```
 ##访问在线API文档:
 http://localhost:8080/debug/index.html 即可在线查看API手册和调试API。
 
@@ -31,7 +33,7 @@ http://localhost:8080/debug/index.html 即可在线查看API手册和调试API�
 
 ##创建数据库
 create user table:
-
+```
 CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(45) NOT NULL,
@@ -50,7 +52,9 @@ CREATE TABLE `authorities` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `username_UNIQUE` (`username`,`authority`)
 ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
-
+```
 
 ##API保活访问采用cookie方式，APP客户端需要把cookie放在http  header中发送到服务端，测试如下，SESSION换成你得到的cookie即可
+```
 curl http://localhost:8080/api/i/user/9 -H "Cookie:SESSION=5b55e933-7c68-4333-82e4-656d777d72a4"
+```
