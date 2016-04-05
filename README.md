@@ -58,3 +58,5 @@ CREATE TABLE `authorities` (
 ```
 curl http://localhost:8080/api/i/user/9 -H "Cookie:SESSION=5b55e933-7c68-4333-82e4-656d777d72a4"
 ```
+
+## 企鹅讨论群：103880410，请注明来自赛克通博客或GitHub。
