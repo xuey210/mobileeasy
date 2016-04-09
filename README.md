@@ -119,4 +119,4 @@ http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#howto-creat
 
 
 
-## 企鹅讨论群：103880410，请注明来自赛克通博客或GitHub。
+## 企鹅讨论群：103880410，请注明来自[赛克通博客](https://blog.sectong.com)或GitHub。
