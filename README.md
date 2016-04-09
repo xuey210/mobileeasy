@@ -59,4 +59,64 @@ CREATE TABLE `authorities` (
 curl http://localhost:8080/api/i/user/9 -H "Cookie:SESSION=5b55e933-7c68-4333-82e4-656d777d72a4"
 ```
 
+## 如果部署到Tomcat中，需要稍微修改一下
+
+### 修改pom.xml文件
+
+官方参考：
+http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#build-tool-plugins-maven-packaging
+
+```
+
+	<?xml version="1.0" encoding="UTF-8"?>
+	<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	    <!-- ... -->
+	    <packaging>war</packaging>
+	    <!-- ... -->
+	    <dependencies>
+	        <dependency>
+	            <groupId>org.springframework.boot</groupId>
+	            <artifactId>spring-boot-starter-web</artifactId>
+	        </dependency>
+	        <dependency>
+	            <groupId>org.springframework.boot</groupId>
+	            <artifactId>spring-boot-starter-tomcat</artifactId>
+	            <scope>provided</scope>
+	        </dependency>
+	        <!-- ... -->
+	    </dependencies>
+	</project>
+
+```
+
+将包改成 war，加入tomcat的scope为 provided，这样部署到TOMCAT就不会启动内置的tomcat了。
+
+### 修改启动类
+
+官方参考：
+http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#howto-create-a-deployable-war-file
+
+```
+
+	@SpringBootApplication
+	public class Application extends SpringBootServletInitializer {
+	
+	    @Override
+	    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+	        return application.sources(Application.class);
+	    }
+	
+	    public static void main(String[] args) throws Exception {
+	        SpringApplication.run(Application.class, args);
+	    }
+	
+	}
+
+```
+
+将你的启动类改成以上样式。 mvn package 打包，并把target下的war包部署到TOMCAT即可。
+
+
+
 ## 企鹅讨论群：103880410，请注明来自赛克通博客或GitHub。
