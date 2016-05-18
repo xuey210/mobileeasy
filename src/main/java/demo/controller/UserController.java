@@ -70,7 +70,7 @@ public class UserController {
 		this.userRepository = userRepository;
 	}
 
-	@InitBinder("form")
+	@InitBinder("userCreateForm")
 	public void initBinder(WebDataBinder binder) {
 		binder.addValidators(userCreateFormValidator);
 	}
