@@ -43,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			WebSecurityConfigurerAdapter {
 		protected void configure(HttpSecurity http) throws Exception {
 			http.antMatcher("/api/i/**").authorizeRequests().anyRequest()
-					.hasRole("USER").and().httpBasic();
+					.hasRole("USER").and().httpBasic().and().csrf().disable();
 		}
 	}
 
@@ -55,7 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
 			http.authorizeRequests()
-					.antMatchers("/api/create", "/", "/assets/**", "/plugins/**",
+					.antMatchers("/api/create", "/", "/assets/**", "/plugins/**", "/static/**",
 							"/bootstrap/**", "/api-docs/**", "/debug/**", "/api/**")
 					.permitAll()
 					.antMatchers("/admin/**").hasRole("ADMIN")
