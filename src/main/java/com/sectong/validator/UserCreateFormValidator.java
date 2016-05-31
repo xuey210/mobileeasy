@@ -1,4 +1,4 @@
-package demo.validator;
+package com.sectong.validator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import demo.domain.UserCreateForm;
-import demo.service.UserService;
+import com.sectong.domain.UserCreateForm;
+import com.sectong.service.UserService;
 
 /**
  * 验证字段实现

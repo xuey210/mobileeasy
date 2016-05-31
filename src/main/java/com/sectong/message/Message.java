@@ -1,4 +1,4 @@
-package demo.message;
+package com.sectong.message;
 
 /**
  * 错误信息处理

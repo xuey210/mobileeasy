@@ -1,4 +1,4 @@
-package demo.repository;
+package com.sectong.repository;
 
 import java.util.Collection;
 
@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.core.annotation.RestResource;
 
-import demo.domain.User;
+import com.sectong.domain.User;
 
 /**
  * 用户User CrudRepository定义

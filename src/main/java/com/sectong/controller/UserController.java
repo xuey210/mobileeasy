@@ -1,4 +1,4 @@
-package demo.controller;
+package com.sectong.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -25,15 +25,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.sectong.domain.User;
+import com.sectong.domain.UserCreateForm;
+import com.sectong.message.Message;
+import com.sectong.repository.UserRepository;
+import com.sectong.service.UserService;
+import com.sectong.validator.UserCreateFormValidator;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
-
-import demo.domain.User;
-import demo.domain.UserCreateForm;
-import demo.message.Message;
-import demo.repository.UserRepository;
-import demo.service.UserService;
-import demo.validator.UserCreateFormValidator;
 
 /**
  * 处理用户类接口

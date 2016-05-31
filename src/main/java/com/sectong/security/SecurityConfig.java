@@ -1,4 +1,4 @@
-package demo.security;
+package com.sectong.security;
 
 import javax.sql.DataSource;
 

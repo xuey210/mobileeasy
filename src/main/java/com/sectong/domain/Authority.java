@@ -1,4 +1,4 @@
-package demo.domain;
+package com.sectong.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

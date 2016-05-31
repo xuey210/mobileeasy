@@ -1,4 +1,4 @@
-package demo.administration;
+package com.sectong.administration;
 
 import org.lightadmin.api.config.AdministrationConfiguration;
 import org.lightadmin.api.config.builder.EntityMetadataConfigurationUnitBuilder;
@@ -6,7 +6,7 @@ import org.lightadmin.api.config.builder.ScreenContextConfigurationUnitBuilder;
 import org.lightadmin.api.config.unit.EntityMetadataConfigurationUnit;
 import org.lightadmin.api.config.unit.ScreenContextConfigurationUnit;
 
-import demo.domain.User;
+import com.sectong.domain.User;
 
 public class UserAdministration extends AdministrationConfiguration<User> {
 

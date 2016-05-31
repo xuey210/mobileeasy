@@ -1,4 +1,4 @@
-package demo;
+package com.sectong;
 
 import org.lightadmin.api.config.LightAdmin;
 import org.lightadmin.core.config.LightAdminWebApplicationInitializer;
@@ -21,7 +21,7 @@ import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 @ComponentScan
 @EnableAutoConfiguration
 @Order(HIGHEST_PRECEDENCE)
-public class SpringSecuritySessionRedisUserDetailsServiceApplication extends
+public class MobileEasyApplication extends
 		SpringBootServletInitializer {
 
 	@Bean
@@ -43,7 +43,7 @@ public class SpringSecuritySessionRedisUserDetailsServiceApplication extends
 
 	public static void main(String[] args) throws Exception {
 		SpringApplication.run(
-				SpringSecuritySessionRedisUserDetailsServiceApplication.class,
+				MobileEasyApplication.class,
 				args);
 	}
 
@@ -51,7 +51,7 @@ public class SpringSecuritySessionRedisUserDetailsServiceApplication extends
 	protected SpringApplicationBuilder configure(
 			SpringApplicationBuilder application) {
 		return application
-				.sources(SpringSecuritySessionRedisUserDetailsServiceApplication.class);
+				.sources(MobileEasyApplication.class);
 	}
 
 }

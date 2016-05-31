@@ -1,4 +1,4 @@
-package demo.service;
+package com.sectong.service;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -23,11 +23,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import demo.domain.Authority;
-import demo.domain.User;
-import demo.domain.UserCreateForm;
-import demo.repository.AuthorityRepository;
-import demo.repository.UserRepository;
+import com.sectong.domain.Authority;
+import com.sectong.domain.User;
+import com.sectong.domain.UserCreateForm;
+import com.sectong.repository.AuthorityRepository;
+import com.sectong.repository.UserRepository;
 
 /**
  * 用户服务接口实现

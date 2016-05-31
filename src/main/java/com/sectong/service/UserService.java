@@ -1,12 +1,12 @@
-package demo.service;
+package com.sectong.service;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
-import demo.domain.User;
-import demo.domain.UserCreateForm;
+import com.sectong.domain.User;
+import com.sectong.domain.UserCreateForm;
 
 /**
  * 用户服务网接口定义

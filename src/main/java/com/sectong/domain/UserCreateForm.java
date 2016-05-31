@@ -1,4 +1,4 @@
-package demo.domain;
+package com.sectong.domain;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
