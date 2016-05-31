@@ -20,9 +20,8 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<start-class>com.secotng.MobileEasyApplication</start-class>
+		<start-class>com.sectong.MobileEasyApplication</start-class>
 		<java.version>1.8</java.version>
-		<lightadmin.version>1.2.0.RC1</lightadmin.version>
 	</properties>
 
 	<dependencies>
@@ -67,16 +66,15 @@
 		<dependency>
 			<groupId>com.mangofactory</groupId>
 			<artifactId>swagger-springmvc</artifactId>
-			<version>1.0.2</version>
+			<version>1.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jersey</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.lightadmin</groupId>
-			<artifactId>lightadmin</artifactId>
-			<version>${lightadmin.version}</version>
+			<groupId>com.zaxxer</groupId>
+			<artifactId>HikariCP</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

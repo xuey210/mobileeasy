@@ -2,6 +2,8 @@ package com.sectong.repository;
 
 import java.util.Collection;
 
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
@@ -15,7 +17,9 @@ import com.sectong.domain.User;
  * @author jiekechoo
  *
  */
-@RestResource(exported = false)
+@RestResource(exported = false) // 禁止暴露REST
+@CacheConfig(cacheNames = "users") // 缓存users表，适用于固定不变的数据表
+@Cacheable
 public interface UserRepository extends CrudRepository<User, Long> {
 
 	Collection<User> findAll();

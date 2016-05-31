@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -38,8 +39,7 @@ import com.sectong.repository.UserRepository;
 @Service
 public class UserServiceImpl implements UserService {
 
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(UserServiceImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 	private final UserRepository userRepository;
 	private final AuthorityRepository authorityRepository;
 
@@ -52,8 +52,7 @@ public class UserServiceImpl implements UserService {
 	 * @param userRepository
 	 */
 	@Autowired
-	public UserServiceImpl(UserRepository userRepository,
-			AuthorityRepository authorityRepository) {
+	public UserServiceImpl(UserRepository userRepository, AuthorityRepository authorityRepository) {
 		this.userRepository = userRepository;
 		this.authorityRepository = authorityRepository;
 	}
@@ -74,8 +73,7 @@ public class UserServiceImpl implements UserService {
 	public User create(UserCreateForm form) {
 		User user = new User();
 		user.setUsername(form.getUsername());
-		user.setPassword(new BCryptPasswordEncoder(10).encode(form
-				.getPassword()));
+		user.setPassword(new BCryptPasswordEncoder(10).encode(form.getPassword()));
 		user.setEnabled(1);
 
 		Authority authority = new Authority();
@@ -97,43 +95,34 @@ public class UserServiceImpl implements UserService {
 					byte[] bytes = file.getBytes();
 
 					// 当前app根目录
-					String rootPath = request.getServletContext().getRealPath(
-							"/");
+					String rootPath = request.getServletContext().getRealPath("/");
 
 					// 需要上传的相对地址（application.properties中获取）
-					String relativePath = env
-							.getProperty("image.file.upload.dir");
+					String relativePath = env.getProperty("image.file.upload.dir");
 
 					// 文件夹是否存在，不存在就创建
-					File dir = new File(rootPath + File.separator
-							+ relativePath);
+					File dir = new File(rootPath + File.separator + relativePath);
 					if (!dir.exists())
 						dir.mkdirs();
 					String fileExtension = getFileExtension(file);
 
 					// 生成UUID样式的文件名
-					String filename = java.util.UUID.randomUUID().toString()
-							+ "." + fileExtension;
+					String filename = java.util.UUID.randomUUID().toString() + "." + fileExtension;
 
 					// 文件全名
-					String fullFilename = dir.getAbsolutePath()
-							+ File.separator + filename;
+					String fullFilename = dir.getAbsolutePath() + File.separator + filename;
 
 					// 用户头像被访问路径
-					String relativeFile = relativePath + File.separator
-							+ filename;
+					String relativeFile = relativePath + File.separator + filename;
 
 					// 保存图片
 					File serverFile = new File(fullFilename);
-					BufferedOutputStream stream = new BufferedOutputStream(
-							new FileOutputStream(serverFile));
+					BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
 					stream.write(bytes);
 					stream.close();
-					LOGGER.info("Server File Location = "
-							+ serverFile.getAbsolutePath());
+					LOGGER.info("Server File Location = " + serverFile.getAbsolutePath());
 
-					String serverPath = new URL(request.getScheme(),
-							request.getServerName(), request.getServerPort(),
+					String serverPath = new URL(request.getScheme(), request.getServerName(), request.getServerPort(),
 							request.getContextPath()).toString();
 					ret.put("url", serverPath + "/" + relativeFile);
 
@@ -172,8 +161,7 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public String getCurrentUsername() {
-		Authentication auth = SecurityContextHolder.getContext()
-				.getAuthentication();
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String name = auth.getName();
 		return name;
 	}
@@ -202,8 +190,8 @@ public class UserServiceImpl implements UserService {
 		if (rowCount == -1) {
 			rowCount = new Long(total).intValue();
 		}
-		Page<User> users = userRepository.findByUsernameContaining(
-				searchPhrase, new PageRequest(current - 1, rowCount));
+		Page<User> users = userRepository.findByUsernameContaining(searchPhrase,
+				new PageRequest(current - 1, rowCount));
 		for (User user : users) {
 			HashMap<String, Object> data = new HashMap<String, Object>();
 			data.put("id", user.getId());
@@ -215,8 +203,7 @@ public class UserServiceImpl implements UserService {
 				data.put("enabled", "<font color='red'>禁用</font>");
 			}
 
-			List<Authority> authorities = authorityRepository
-					.findByUsername(user.getUsername());
+			List<Authority> authorities = authorityRepository.findByUsername(user.getUsername());
 			ArrayList<String> arrayList = new ArrayList<String>();
 			for (Authority authority : authorities) {
 				if (authority.getAuthority().equals("ROLE_ADMIN")) {
