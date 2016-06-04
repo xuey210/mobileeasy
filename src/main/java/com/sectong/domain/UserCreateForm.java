@@ -16,8 +16,8 @@ public class UserCreateForm {
 	@NotEmpty
 	private String password;
 
-	@NotEmpty
-	private String passwordRepeat;
+	// @NotEmpty
+	// private String passwordRepeat;
 
 	public String getUsername() {
 		return username;
@@ -35,18 +35,17 @@ public class UserCreateForm {
 		this.password = password;
 	}
 
-	public String getPasswordRepeat() {
-		return passwordRepeat;
-	}
-
-	public void setPasswordRepeat(String passwordRepeat) {
-		this.passwordRepeat = passwordRepeat;
-	}
+	// public String getPasswordRepeat() {
+	// return passwordRepeat;
+	// }
+	//
+	// public void setPasswordRepeat(String passwordRepeat) {
+	// this.passwordRepeat = passwordRepeat;
+	// }
 
 	@Override
 	public String toString() {
-		return "UserCreateForm [username=" + username + ", password="
-				+ password + ", passwordRepeat=" + passwordRepeat + "]";
+		return "UserCreateForm [username=" + username + ", password=" + password + "]";
 	}
 
 }

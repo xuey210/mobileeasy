@@ -46,8 +46,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 @RequestMapping("/api")
 public class UserController {
 
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(UserController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 	private UserService userService;
 	private UserCreateFormValidator userCreateFormValidator;
 	private UserRepository userRepository;
@@ -61,8 +60,7 @@ public class UserController {
 	private Environment env;
 
 	@Autowired
-	public UserController(UserService userService,
-			UserCreateFormValidator userCreateFormValidator,
+	public UserController(UserService userService, UserCreateFormValidator userCreateFormValidator,
 			UserRepository userRepository) {
 		this.userService = userService;
 		this.userCreateFormValidator = userCreateFormValidator;
@@ -74,16 +72,28 @@ public class UserController {
 		binder.addValidators(userCreateFormValidator);
 	}
 
+	@ApiOperation(httpMethod = "POST", value = "用户登录(<font color='blue'>release</font>)", notes = "使用<a href='http://zh.wikipedia.org/wiki/HTTP%E5%9F%BA%E6%9C%AC%E8%AE%A4%E8%AF%81'>httpBasic验证</a>，"
+			+ "提交手机号码和用户密码登录，登录成功返回1，其他失败。<br>"
+			+ "1、将'Authorization: Basic <base64(username:password)>'放入http header；<br>"
+			+ "2、成功后从http header中获得的x-auth-token将作为以后登录的凭证。<br><br>"
+			+ "本次登录成功后，前一个以此用户凭证登录的用户将被<font color='red'>超时踢出</font>。")
+	@RequestMapping(method = RequestMethod.POST, value = "i/userLogin")
+	public ResponseEntity<Message> userLogin(HttpServletRequest request) {
+		User user = userService.getCurrentUser();
+		message.setMsg(1, "用户登录成功", user);
+		return new ResponseEntity<Message>(message, HttpStatus.OK);
+	}
+
 	@ApiOperation(httpMethod = "POST", value = "创建用户(<font color='blue'>release</font>)", notes = "POST请求，根据model设置")
 	@ResponseBody
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public String handleUserCreateForm(@Valid @RequestBody UserCreateForm form,
+	public ResponseEntity<Message> handleUserCreateForm(@Valid @RequestBody UserCreateForm form,
 			BindingResult bindingResult) {
-		LOGGER.debug("Processing user create form={}, bindingResult={}", form,
-				bindingResult);
+		LOGGER.debug("Processing user create form={}, bindingResult={}", form, bindingResult);
 		if (bindingResult.hasErrors()) {
 			// failed validation
-			return "user_create error: failed validation ";
+			message.setMsg(0, "user_create error: failed validation");
+			return new ResponseEntity<Message>(message, HttpStatus.OK);
 		}
 		try {
 			userService.create(form);
@@ -92,14 +102,15 @@ public class UserController {
 			// admins are adding same user
 			// at the same time and form validation has passed for more than one
 			// of them.
-			LOGGER.warn(
-					"Exception occurred when trying to save the user, assuming duplicate username",
-					e);
+			LOGGER.warn("Exception occurred when trying to save the user, assuming duplicate username", e);
 			bindingResult.reject("username.exists", "username already exists");
-			return "user_create error: username already exists";
+			message.setMsg(0, "user_create error: username already exists");
+			return new ResponseEntity<Message>(message, HttpStatus.OK);
+
 		}
 		// ok, redirect
-		return "create user success";
+		message.setMsg(1, "create user success");
+		return new ResponseEntity<Message>(message, HttpStatus.OK);
 	}
 
 	/**
@@ -161,18 +172,15 @@ public class UserController {
 
 	@ApiOperation(httpMethod = "POST", value = "上传用户头像(<font color='blue'>release</font>)", notes = "使用MultipartFile方式")
 	@RequestMapping(value = "/i/uploadImage", method = RequestMethod.POST)
-	public ResponseEntity<?> uploadImage(@RequestParam MultipartFile file,
-			HttpServletRequest request) {
-		message.setMsg(1, "upload user image",
-				userService.uploadImage(file, request));
+	public ResponseEntity<?> uploadImage(@RequestParam MultipartFile file, HttpServletRequest request) {
+		message.setMsg(1, "upload user image", userService.uploadImage(file, request));
 		return new ResponseEntity<Message>(message, HttpStatus.OK);
 
 	}
 
 	@ApiOperation(httpMethod = "POST", value = "用户信息列表(<font color='blue'>供管理界面使用</font>)", notes = "查看用户信息列表，可分页")
 	@RequestMapping(value = "/getUserList", method = RequestMethod.POST)
-	public Object getUserList(@RequestParam(required = false) int current,
-			@RequestParam(required = false) int rowCount,
+	public Object getUserList(@RequestParam(required = false) int current, @RequestParam(required = false) int rowCount,
 			@RequestParam(required = false) String searchPhrase) {
 		return userService.getUserList(current, rowCount, searchPhrase);
 

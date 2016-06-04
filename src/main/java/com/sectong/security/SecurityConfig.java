@@ -44,7 +44,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public static class ApiWebSecurityConfigurationAdapter extends WebSecurityConfigurerAdapter {
 		protected void configure(HttpSecurity http) throws Exception {
 			http.antMatcher("/api/i/**")// 带有“i”的目录都需要认证或提供token
-					.authorizeRequests().anyRequest().hasRole("USER").and().httpBasic().and().csrf().disable();
+					.authorizeRequests().anyRequest().hasRole("USER").and().httpBasic().and().csrf().disable()
+					.sessionManagement().maximumSessions(1).expiredUrl("/api/sessionExpired"); // 每个用户只有一个有效会话，第二个设备登录就挤掉前面一个
 		}
 	}
 

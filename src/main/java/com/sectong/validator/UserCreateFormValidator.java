@@ -19,8 +19,7 @@ import com.sectong.service.UserService;
 @Component
 public class UserCreateFormValidator implements Validator {
 
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(UserCreateFormValidator.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(UserCreateFormValidator.class);
 	private final UserService userService;
 
 	@Autowired
@@ -37,20 +36,19 @@ public class UserCreateFormValidator implements Validator {
 	public void validate(Object target, Errors errors) {
 		LOGGER.debug("Validating {}", target);
 		UserCreateForm form = (UserCreateForm) target;
-		validatePasswords(errors, form);
+		// validatePasswords(errors, form);
 		validateUsername(errors, form);
 	}
 
-	private void validatePasswords(Errors errors, UserCreateForm form) {
-		if (!form.getPassword().equals(form.getPasswordRepeat())) {
-			errors.reject("password.no_match", "Passwords do not match");
-		}
-	}
+	// private void validatePasswords(Errors errors, UserCreateForm form) {
+	// if (!form.getPassword().equals(form.getPasswordRepeat())) {
+	// errors.reject("password.no_match", "Passwords do not match");
+	// }
+	// }
 
 	private void validateUsername(Errors errors, UserCreateForm form) {
 		if (userService.getUserByUsername(form.getUsername()) != null) {
-			errors.reject("username.exists",
-					"User with this USERNAME already exists");
+			errors.reject("username.exists", "User with this USERNAME already exists");
 		}
 	}
 }
