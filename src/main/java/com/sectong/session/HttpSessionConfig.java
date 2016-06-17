@@ -29,15 +29,15 @@ public class HttpSessionConfig {
 		return factory;
 	}
 
-	 //暂时取消 x-auth-token，以默认cookie代替
-	 /**
+	// 暂时取消 x-auth-token，以默认cookie代替
+	/**
 	 * HttpSessionStrategy
 	 *
 	 * @return
 	 */
-	 @Bean
-	 public HttpSessionStrategy httpSessionStrategy() {
-	 return new HeaderHttpSessionStrategy();
-	 }
+	@Bean
+	public HttpSessionStrategy httpSessionStrategy() {
+		return new HeaderHttpSessionStrategy();
+	}
 
- }
+}

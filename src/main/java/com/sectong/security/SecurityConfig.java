@@ -61,6 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
+			http.httpBasic();
 			http.authorizeRequests()
 					.antMatchers("/api/create", "/", "/assets/**", "/plugins/**", "/static/**", "/bootstrap/**",
 							"/api-docs/**", "/debug/**", "/api/**") // 免认证目录
