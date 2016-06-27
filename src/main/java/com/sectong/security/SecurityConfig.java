@@ -1,7 +1,5 @@
 package com.sectong.security;
 
-import javax.sql.DataSource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -10,6 +8,8 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import javax.sql.DataSource;
 
 /**
  * 安全配置文件，主要是重写默认的认证方式和访问目录权限
@@ -62,12 +62,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
 			http.httpBasic();
-			http.authorizeRequests()
-					.antMatchers("/api/create", "/", "/assets/**", "/plugins/**", "/static/**", "/bootstrap/**",
-							"/api-docs/**", "/debug/**", "/api/**") // 免认证目录
-					.permitAll().antMatchers("/admin/**").hasRole("ADMIN")// ADMIN角色可以访问/admin目录
-					.anyRequest().authenticated().and().formLogin().loginPage("/login")// 自定义登录页为/login
-					.permitAll().and().logout().permitAll().and().csrf().disable();
-		}
+            http.authorizeRequests()
+                    .antMatchers("/api/create", "/", "/assets/**", "/plugins/**", "/static/**", "/bootstrap/**",
+                            "/api-docs/**", "/debug/**", "/api/**", "/weatherstation/**") // 免认证目录
+                    .permitAll().antMatchers("/admin/**").hasRole("ADMIN")// ADMIN角色可以访问/admin目录
+                    .anyRequest().authenticated().and().formLogin().loginPage("/login")// 自定义登录页为/login
+                    .permitAll().and().logout().permitAll().and().csrf().disable();
+        }
 	}
 }
