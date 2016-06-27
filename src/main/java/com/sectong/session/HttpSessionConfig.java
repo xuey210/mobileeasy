@@ -25,9 +25,11 @@ public class HttpSessionConfig {
 	 */
 	@Bean
 	public JedisConnectionFactory connectionFactory() {
-		JedisConnectionFactory factory = new JedisConnectionFactory();
-		return factory;
-	}
+        JedisConnectionFactory factory = new JedisConnectionFactory();
+        factory.setHostName("101.200.211.1");
+        factory.setPort(6379);
+        return factory;
+    }
 
 	// 暂时取消 x-auth-token，以默认cookie代替
 	/**
