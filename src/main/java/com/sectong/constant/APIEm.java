@@ -6,8 +6,8 @@ package com.sectong.constant;
  */
 public enum APIEm {
 
-    SUCCESS(2000,"操作成功!"),
-    FAIL(2001, "操作失败");
+    SUCCESS(2000,"success"),
+    FAIL(2001, "failed");
 
     private int code;
     private String message;

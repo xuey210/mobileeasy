@@ -1,4 +1,4 @@
-package com.sectong.domain.datamodle;
+package com.sectong.domain.objectmodle;
 
 import java.io.Serializable;
 

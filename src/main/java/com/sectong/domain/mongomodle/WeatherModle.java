@@ -1,0 +1,59 @@
+package com.sectong.domain.mongomodle;
+
+import org.springframework.data.annotation.Id;
+
+import java.io.Serializable;
+
+/**
+ * Created by xueyong on 16/6/28.
+ * demo.
+ */
+public class WeatherModle implements Serializable {
+
+    @Id
+    private String id;
+    private String weatherData;
+    private String deviceMAC;
+    private Long createDate;
+
+    public Long getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Long createDate) {
+        this.createDate = createDate;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getDeviceMAC() {
+        return deviceMAC;
+    }
+
+    public void setDeviceMAC(String deviceMAC) {
+        this.deviceMAC = deviceMAC;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getWeatherData() {
+        return weatherData;
+    }
+
+    public void setWeatherData(String weatherData) {
+        this.weatherData = weatherData;
+    }
+
+    @Override
+    public String toString() {
+        return "WeatherModle{" +
+                "createDate=" + createDate +
+                ", id='" + id + '\'' +
+                ", weatherData='" + weatherData + '\'' +
+                '}';
+    }
+}
