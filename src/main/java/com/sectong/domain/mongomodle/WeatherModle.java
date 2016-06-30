@@ -12,7 +12,7 @@ public class WeatherModle implements Serializable {
 
     @Id
     private String id;
-    private String weatherData;
+    private Object weatherData;
     private String deviceMAC;
     private Long createDate;
 
@@ -40,11 +40,11 @@ public class WeatherModle implements Serializable {
         this.id = id;
     }
 
-    public String getWeatherData() {
+    public Object getWeatherData() {
         return weatherData;
     }
 
-    public void setWeatherData(String weatherData) {
+    public void setWeatherData(Object weatherData) {
         this.weatherData = weatherData;
     }
 

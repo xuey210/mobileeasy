@@ -1,5 +1,6 @@
 package com.sectong.controller;
 
+import com.mongodb.util.JSON;
 import com.sectong.constant.APIEm;
 import com.sectong.domain.mongomodle.WeatherModle;
 import com.sectong.domain.objectmodle.WeatherReturn;
@@ -51,16 +52,11 @@ public class WeatherStationController {
         WeatherReturn weatherReturn = new WeatherReturn();
         try {
             String requestString = IOUtils.toString(request.getInputStream());
-            LOGGER.debug("requestString:{}", requestString);
             weatherStation = JsonUtil.parseObject(requestString, WeatherStation.class);
-
-            weatherReturn.setDevice_MAC(weatherStation.getDevice_MAC());
-            weatherReturn.setDevice_software_updateflag("true");
             _tempString = JsonUtil.toJSONString(weatherStation);
-
             WeatherModle weatherModle = new WeatherModle();
             weatherModle.setDeviceMAC(weatherStation.getDevice_MAC());
-            weatherModle.setWeatherData(_tempString);
+            weatherModle.setWeatherData(JSON.parse(_tempString));
             weatherModle.setCreateDate(System.currentTimeMillis());
             weatherService.insertWeather(weatherModle);
         } catch (IOException e) {
@@ -69,9 +65,9 @@ public class WeatherStationController {
             weatherStation = new WeatherStation();
             weatherReturn.setDevice_MAC(weatherStation.getDevice_MAC());
             weatherReturn.setDevice_software_updateflag("fault");
-            _tempString = JsonUtil.toJSONString(weatherStation);
+            _tempString = JSON.serialize(weatherStation);
         }
-        message.setMsg(APIEm.SUCCESS.getCode(), APIEm.SUCCESS.getMessage(), _tempString);
+        message.setMsg(APIEm.SUCCESS.getCode(), APIEm.SUCCESS.getMessage(), JSON.parse(_tempString));
         return new ResponseEntity<Message>(message, HttpStatus.OK);
     }
 
