@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -77,10 +78,11 @@ public class WeatherStationController {
     public ResponseEntity<Message> getWeather(@PathVariable String mac,HttpServletRequest request) {
         Message message = new Message();
         try {
+            Assert.notNull(mac, "mac cant be null");
             WeatherModle weatherModle = weatherService.getWeatherByMac(mac);
             message.setMsg(APIEm.SUCCESS.getCode(), APIEm.SUCCESS.getMessage(), weatherModle.getWeatherData());
         } catch (Exception e) {
-            LOGGER.error("post exception :{}", e);
+            LOGGER.error("post exception :{}", e.getMessage());
             e.printStackTrace();
             message.setMsg(APIEm.FAIL.getCode(), APIEm.FAIL.getMessage(), "");
         }
