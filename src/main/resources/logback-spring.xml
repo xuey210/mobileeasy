@@ -15,7 +15,7 @@
         <File>/Users/xueyong/Desktop/logs/wr.log</File>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
-            <FileNamePattern>rest-wr.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <FileNamePattern>/Users/xueyong/Desktop/logs/rest-wr.%d{yyyy-MM-dd}.log</FileNamePattern>
             <!-- keep 30 days' worth of history -->
             <maxHistory>30</maxHistory>
         </rollingPolicy>
@@ -24,10 +24,10 @@
         </encoder>
     </appender>
 
-	<logger name="com.sectong" level="DEBUG" appender="consoleAppender" >
+	<logger name="com.sectong.controller" level="DEBUG" appender="consoleAppender" >
         <appender-ref ref="consoleAppender" />
     </logger>
-    <logger name="com.sectong.controller.WeatherStationController" level="DEBUG">
+    <logger name="com.sectong.monitor.ControllerMonitor" level="DEBUG">
         <appender-ref ref="dailyRollingFileAppender" />
     </logger>
 
