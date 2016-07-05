@@ -1,8 +1,13 @@
 package com.sectong.controller;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-
+import com.sectong.domain.User;
+import com.sectong.domain.UserCreateForm;
+import com.sectong.message.Message;
+import com.sectong.repository.UserRepository;
+import com.sectong.service.UserService;
+import com.sectong.validator.UserCreateFormValidator;
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,26 +18,14 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.sectong.domain.User;
-import com.sectong.domain.UserCreateForm;
-import com.sectong.message.Message;
-import com.sectong.repository.UserRepository;
-import com.sectong.service.UserService;
-import com.sectong.validator.UserCreateFormValidator;
-import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.annotations.ApiOperation;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 /**
  * 处理用户类接口
@@ -83,6 +76,17 @@ public class UserController {
 		message.setMsg(1, "用户登录成功", user);
 		return new ResponseEntity<Message>(message, HttpStatus.OK);
 	}
+
+    @ApiOperation(httpMethod = "POST", value = "用户修改密码(<font color='blue'>release</font>)",
+            notes = "用户输入原有密码，和新密码")
+    @RequestMapping(method = RequestMethod.POST, value = "i/updatepwd")
+    public ResponseEntity<Message> updatePwd(HttpServletRequest request) {
+        User user = userService.getCurrentUser();
+        user.setPassword(new BCryptPasswordEncoder(10).encode(request.getParameter("repwd")));
+        userRepository.save(user);
+        message.setMsg(1, "用户修改密码成功", user);
+        return new ResponseEntity<Message>(message, HttpStatus.OK);
+    }
 
 	@ApiOperation(httpMethod = "POST", value = "创建用户(<font color='blue'>release</font>)", notes = "POST请求，根据model设置")
 	@ResponseBody
