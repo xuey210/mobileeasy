@@ -13,7 +13,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
-import org.springframework.util.SerializationUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,7 +42,7 @@ public class MacController {
     @RequestMapping(method = RequestMethod.POST, value = "/bindingMac")
     public ResponseEntity<Message> bindingMac(HttpServletRequest request, UserMac userMac) {
         Message message = new Message();
-        String result = "";
+        Object result;
         try {
 
             //查询是否绑定。绑定
@@ -52,7 +51,7 @@ public class MacController {
                 result = "already bind";
             }else {
                 UserMac user = macService.insertUserMac(userMac);
-                result = SerializationUtils.serialize(user).toString();
+                result = user;
             }
 
         } catch (Exception e) {
