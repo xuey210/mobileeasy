@@ -64,7 +64,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			http.httpBasic();
             http.authorizeRequests()
                     .antMatchers("/api/create", "/", "/assets/**", "/plugins/**", "/static/**", "/bootstrap/**",
-                            "/api-docs/**", "/debug/**", "/api/**", "/weatherstation/**","/mac/**") // 免认证目录
+                            "/api-docs/**", "/debug/**", "/api/**", "/weatherstation/**","/mac/**","/v/**") // 免认证目录
                     .permitAll().antMatchers("/admin/**").hasRole("ADMIN")// ADMIN角色可以访问/admin目录
                     .anyRequest().authenticated().and().formLogin().loginPage("/login")// 自定义登录页为/login
                     .permitAll().and().logout().permitAll().and().csrf().disable();
