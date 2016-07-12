@@ -7,6 +7,7 @@ package com.sectong.constant;
 public enum APIEm {
 
     SUCCESS(2000,"success"),
+    NOTBINDING(2002, "user has not yet binding mac"),
     FAIL(2001, "failed");
 
     private int code;

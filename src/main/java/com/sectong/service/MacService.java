@@ -14,4 +14,6 @@ public interface MacService {
     void remove(String id);
 
     Collection<UserMac> findByNameAndMac(String name, String mac);
+
+    Collection<UserMac> findByName(String name);
 }

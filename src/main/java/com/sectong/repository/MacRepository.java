@@ -14,4 +14,6 @@ import java.util.Collection;
 public interface MacRepository extends MongoRepository<UserMac, String> {
 
     Collection<UserMac> findByNameAndMac(String name, String mac);
+
+    Collection<UserMac> findByName(String name);
 }

@@ -33,4 +33,9 @@ public class MacServiceImpl implements MacService {
     public Collection<UserMac> findByNameAndMac(String name, String mac) {
         return macRepository.findByNameAndMac(name, mac);
     }
+
+    @Override
+    public Collection<UserMac> findByName(String name) {
+        return macRepository.findByName(name);
+    }
 }

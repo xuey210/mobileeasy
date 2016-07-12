@@ -62,6 +62,27 @@ public class MacController {
         return new ResponseEntity<Message>(message, HttpStatus.OK);
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/isbinding")
+    public ResponseEntity<Message> isbinding(HttpServletRequest request, UserMac userMac) {
+        Message message = new Message();
+        Object result;
+        try {
+            Assert.notNull(userMac.getName(), "userMac.name is null");
+            Collection<UserMac> linkedList = macService.findByName(userMac.getName());
+            if (linkedList.size() == 1) {
+                result = linkedList.iterator().next();
+                message.setMsg(APIEm.SUCCESS.getCode(), APIEm.SUCCESS.getMessage(), result);
+            }else {
+                message.setMsg(APIEm.NOTBINDING.getCode(), APIEm.NOTBINDING.getMessage(), null);
+            }
+        } catch (Exception e) {
+            LOGGER.error("post exception :{}", e);
+            result = e.getMessage();
+            message.setMsg(APIEm.FAIL.getCode(), APIEm.FAIL.getMessage(), result);
+        }
+        return new ResponseEntity<Message>(message, HttpStatus.OK);
+    }
+
     @RequestMapping(method = RequestMethod.POST, value = "/removeBindindMac")
     public ResponseEntity<Message> removeBindindMac(HttpServletRequest request, UserMac userMac) {
         Message message = new Message();
